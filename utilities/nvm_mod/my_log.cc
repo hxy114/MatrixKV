@@ -1,4 +1,5 @@
 #include "my_log.h"
+#include <cstring>
 namespace rocksdb {
 void init_log_file() {
   FILE* fp;
@@ -69,9 +70,14 @@ void LZW_LOG(int file_num, const char* format, ...) {
   }
 
   FILE* fp = fopen(log_file->c_str(), "a");
-  if (fp == nullptr) printf("log failed\n");
-  fprintf(fp, "%s", buf);
-  fclose(fp);
+  if (fp == nullptr) {
+    printf("log failed\n");
+    printf("open fail errno = %d reason = %s \n", errno, strerror(errno));
+  }else{
+    fprintf(fp, "%s", buf);
+    fclose(fp);
+  }
+
 }
 
 }  // namespace rocksdb
